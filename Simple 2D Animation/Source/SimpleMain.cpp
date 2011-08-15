@@ -68,7 +68,7 @@ void CSimpleMain::InitCSimpleMain(HWND hWnd, HINSTANCE hInstance, int nWidth, in
 	m_pTextureManager	= CTextureManager::GetInstance();
 	m_pSpriteManager	= CSpriteManager::GetInstance();
 	m_pDirectInput		= CDirectInput::GetInstance();
-	m_pTimer			= CTimer::GetInstance();
+	m_pTimer			= Timer::GetInstance();
 	m_pAnimationManager	= CAnimationManager::GetInstance();
 	m_pBMPFont			= CBMPFont::GetInstance();
 	m_pCamera			= CCamera::GetInstance();

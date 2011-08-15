@@ -12,7 +12,9 @@
 #include <windows.h>
 #include "resource.h"
 #include <ctime>
+#include <process.h>
 #include "SimpleMain.h"
+#include "WorldGod.h"
 
 //console window includes
 #ifdef _DEBUG
@@ -32,6 +34,18 @@ using namespace std;
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 int WINAPI WinMain(	HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdline, int ncmdshow);
+
+unsigned int __stdcall ThreadGameUpdate(void *pData);
+HANDLE hThreadWorldUpdate;
+unsigned int nThreadGameStatus = 0;
+unsigned int __stdcall ThreadWorldUpdate(void *pData);
+HANDLE hThreadGameUpdate;
+unsigned int nThreadWorldStatus = 0;
+
+WNDCLASS	winclass;		//this will hold the class we create
+MSG			msg;			//generic message
+HWND		hWnd;			//main Window Handle.
+HINSTANCE	hInstance;
 
 //console window redirect function
 #ifdef _DEBUG
@@ -71,13 +85,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 //////////////////////////////////////////////////////////////////////////
 int WINAPI WinMain(	HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdline, int ncmdshow)
 {
-	WNDCLASS	winclass;		//this will hold the class we create
-	MSG			msg;			//generic message
-	HWND		hWnd;			//main Window Handle.
-
-	//pointer to the CSimpleMain singleton
-	CSimpleMain	*g_pSimple = CSimpleMain::GetInstance();
-	
 	//first fill in the window class structure
 	winclass.style			= CS_DBLCLKS | CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
 	winclass.lpfnWndProc	= WindowProc;
@@ -89,6 +96,9 @@ int WINAPI WinMain(	HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdlin
 	winclass.hbrBackground	= (HBRUSH)GetStockObject(BLACK_BRUSH);
 	winclass.lpszMenuName	= NULL; 
 	winclass.lpszClassName	= CLASSNAME;
+
+	//save the hInstance
+	hInstance = hinstance;
 
 	//start up the console window
 	#ifdef _DEBUG
@@ -117,20 +127,24 @@ int WINAPI WinMain(	HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdlin
 	//seed random
 	srand((unsigned)time(0));
 
-	//initialize the CSimpleMain singleton
-	g_pSimple->InitCSimpleMain(hWnd, hinstance, WINDOW_WIDTH, WINDOW_HEIGHT, true);
+	hThreadGameUpdate = (HANDLE)_beginthreadex(NULL, 0, ThreadGameUpdate, 0, 0,  (unsigned int *)&hThreadGameUpdate);
 
-	//some more init lovin
-	g_pSimple->Inits();
+	Sleep(10);
+
+	hThreadWorldUpdate = (HANDLE)_beginthreadex(NULL, 0, ThreadWorldUpdate, 0, 0,  (unsigned int *)&hThreadWorldUpdate);
+
+	Sleep(10);
 
 	//enter main event loop
 	while(true)
 	{
-		if(PeekMessage(&msg,NULL,0,0,PM_REMOVE))
+		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{ 
 			//test if this is a quit
 			if (msg.message == WM_QUIT)
+			{
 				break;
+			}
 
 			//translate any accelerator keys
 			TranslateMessage(&msg);
@@ -139,14 +153,19 @@ int WINAPI WinMain(	HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdlin
 			DispatchMessage(&msg);
 		}
 
-		//if update returns false, exit the loop
-		if(!g_pSimple->UpdateCSimpleMain())
+		if(nThreadGameStatus == 0)
+		{
+			CloseHandle(hThreadGameUpdate);
+			CloseHandle(hThreadWorldUpdate);
 			break;
-
+		}
+		else if(nThreadWorldStatus == 0)
+		{
+			CloseHandle(hThreadGameUpdate);
+			CloseHandle(hThreadWorldUpdate);
+			break;
+		}
 	}
-
-	//clean up time!
-	g_pSimple->ShutDowns();
 
 	//Return to Windows like this
 	return (int)(msg.wParam);
@@ -155,8 +174,6 @@ int WINAPI WinMain(	HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdlin
 //////////////////////////////////////////////////////////////////////////
 // 
 //	Function: 		RedirectIOToConsole
-//
-//	Last Modified: 	07/08/2006
 //
 //	Purpose:		console window redirect function 
 //
@@ -216,3 +233,82 @@ void RedirectIOToConsole()
 	ios::sync_with_stdio();
 }
 #endif
+
+//////////////////////////////////////////////////////////////////////////
+// 
+//	Function: 		ThreadGameUpdate
+//
+//	Purpose:		this is the thread for the game update
+//
+//////////////////////////////////////////////////////////////////////////
+unsigned int __stdcall ThreadGameUpdate(void *pData)
+{
+	//pointer to the CSimpleMain singleton
+	CSimpleMain	*g_pSimple = CSimpleMain::GetInstance();
+
+	//status
+	nThreadGameStatus = 1;
+
+	//initialize the CSimpleMain singleton
+	g_pSimple->InitCSimpleMain(hWnd, hInstance, WINDOW_WIDTH, WINDOW_HEIGHT, true);
+
+	//some more init lovin
+	g_pSimple->Inits();
+
+	//enter main event loop
+	while(true)
+	{
+		//if update returns false, exit the loop
+		if(g_pSimple->UpdateCSimpleMain() == false)
+		{
+			break;
+		}
+	}
+
+	//clean up time!
+	g_pSimple->ShutDowns();
+
+	nThreadGameStatus = 0;
+
+	_endthreadex(0);
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////
+// 
+//	Function: 		ThreadWorldUpdate
+//
+//	Purpose:		this is the thread for the world update
+//
+//////////////////////////////////////////////////////////////////////////
+unsigned int __stdcall ThreadWorldUpdate(void *pData)
+{
+	//pointer to the CSimpleMain singleton
+	WorldGod *pWorldGod = WorldGod::GetInstance();
+
+	//status
+	nThreadWorldStatus = 1;
+
+	//initialize the WorldGod singleton
+	pWorldGod->Init();
+
+	//enter main event loop
+	while(true)
+	{
+		//if update returns false, exit the loop
+		//false basically means something went bad
+		//and we need to close the app
+		if(pWorldGod->Update() == false)
+		{
+			break;
+		}
+	}
+
+	//clean up time!
+	pWorldGod->Shutdown();
+
+	nThreadWorldStatus = 0;
+
+	_endthreadex(0);
+	return 0;
+}

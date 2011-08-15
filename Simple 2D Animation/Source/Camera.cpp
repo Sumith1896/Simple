@@ -58,7 +58,7 @@ void CCamera::InitCamera()
 {
 	m_pDirectX		= CDirectX9::GetInstance();
 	m_pDirectInput	= CDirectInput::GetInstance();
-	m_pTimer		= CTimer::GetInstance();
+	m_pTimer		= Timer::GetInstance();
 
 	m_vLookAtPt = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_vEyePt	= D3DXVECTOR3(0.0f, 0.0f, -25.0f);

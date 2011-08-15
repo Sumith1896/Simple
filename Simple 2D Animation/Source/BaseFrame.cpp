@@ -4,7 +4,7 @@ CBaseFrame::CBaseFrame()
 {
 	D3DXMatrixIdentity(&m_d3dMat);
 	m_pSpriteManager	= CSpriteManager::GetInstance();
-	m_pTimer			= CTimer::GetInstance();
+	m_pTimer			= Timer::GetInstance();
 
 	m_d3dHiBound.x		= 0.0f;	
 	m_d3dHiBound.y		= 0.0f;

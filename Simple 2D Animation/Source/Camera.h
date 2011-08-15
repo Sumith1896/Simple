@@ -17,7 +17,7 @@ class CCamera
 {
 private:
 
-	CTimer						*m_pTimer;				//timer pointer
+	Timer						*m_pTimer;				//timer pointer
 	CDirectX9					*m_pDirectX;			//directx9 pointer
 	CDirectInput				*m_pDirectInput;		//directinput pointer
 

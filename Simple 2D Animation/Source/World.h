@@ -41,8 +41,8 @@ private:
 	NewTerrain		*m_pNewTerrain;
 	WorldChunk		chunk[worldarray][worldarray][worldarray];
 
-	D3DXMATRIX		VisibleArrayDirt[arrayX*arrayY*arrayZ];
-	D3DXMATRIX		VisibleArrayGravel[arrayX*arrayY*arrayZ];
+	D3DXMATRIX		VisibleArrayDirt[arrayX*arrayY*arrayZ*3];
+	D3DXMATRIX		VisibleArrayGravel[arrayX*arrayY*arrayZ*3];
 	int drawcountdirt;
 	int drawcountgravel;
 	static	World *m_pInstance;			//instance to the singleton	

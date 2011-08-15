@@ -49,7 +49,7 @@ private:
 	CTextureManager		*m_pTextureManager;	//pointer to the texture manager singleton
 	CDirectInput		*m_pDirectInput;	//pointer to the direct input singleton
 	CSpriteManager		*m_pSpriteManager;	//pointer to the sprite manager singleton
-	CTimer				*m_pTimer;
+	Timer				*m_pTimer;
 	CAnimationManager	*m_pAnimationManager;	
 	CBMPFont			*m_pBMPFont;
 	CCamera				*m_pCamera;

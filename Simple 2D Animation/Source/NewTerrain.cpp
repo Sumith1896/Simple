@@ -132,7 +132,7 @@ int NewTerrain::CreateBlock(const unsigned int nSize, const char *szName, const 
 
 	NewBlock->pTerrainVB	= NULL;			//Terrain vertex buffer
 	NewBlock->pTerrainIB	= NULL;			//Terrain index buffer
-	NewBlock->pTexture01	= -1;			//terrain texture0
+	NewBlock->pTexture01	= nTextureID;   //terrain texture0
 	NewBlock->nNumVerts		= 4*6;			//number of verts
 	NewBlock->nNumPrims		= 6*6;			//number of prims
 	D3DXMatrixIdentity(&NewBlock->d3dBlockMatrix);
@@ -656,6 +656,13 @@ void NewTerrain::Draw(const unsigned int nBlockID, D3DXMATRIX *d3dBlockMatrix)
 	if(nBlockID > (unsigned int)(m_vBlocks.size() - 1))
 	{
 		COUT << "NewTerrain::Draw() - FAIL(block id out of array bounds)" << endl; 
+		return;
+	}
+
+	//check the bounds of the array
+	if(d3dBlockMatrix == NULL)
+	{
+		COUT << "NewTerrain::Draw() - FAIL(d3dBlockMatrix == NULL)" << endl; 
 		return;
 	}
 	

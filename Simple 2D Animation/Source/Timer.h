@@ -1,8 +1,6 @@
 //////////////////////////////////////////////////////////////////////////
 //
-//	Filename: 	CTimer.h
-//
-//	Author:		Nicholas Legg
+//	Filename: 	Timer.h
 //
 //	Purpose:	high frequency timer
 //
@@ -12,7 +10,7 @@
 #include <stdio.h>
 #include "Helpers.h"
 
-class CTimer  
+class Timer  
 {
 private:
 
@@ -24,16 +22,16 @@ private:
 	char			m_szFrameRate[128];		//string of the current frame rate
 
 	static LONGLONG	m_llFrequency;			//frequency (never will change once system is on)
-	static	CTimer *m_pInstance;			//instance to the singleton	
+	static	Timer *m_pInstance;			//instance to the singleton	
 
-	CTimer(){};
-	CTimer(const CTimer &a){};
-	CTimer &operator=(const CTimer &a){};
+	Timer(){};
+	Timer(const Timer &a){};
+	Timer &operator=(const Timer &a){};
 
 public:
 
-	//	~CTimer: Destructor
-	~CTimer(){};
+	//	~Timer: Destructor
+	~Timer(){};
 
 	//////////////////////////////////////////////////////////////////////////
 	// 
@@ -55,7 +53,7 @@ public:
 	//	Purpose:		Creates the first instance of this class and returns it's address.
 	//
 	//////////////////////////////////////////////////////////////////////////
-	static CTimer *GetInstance();
+	static Timer *GetInstance();
 
 	//////////////////////////////////////////////////////////////////////////
 	// 

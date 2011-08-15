@@ -51,7 +51,7 @@ private:
 
 	vector<tPiece*>		m_vNodes;			//all the pieces that connect to the base
 	
-	CTimer				*m_pTimer;
+	Timer				*m_pTimer;
 	CSpriteManager		*m_pSpriteManager;	//pointer to the texture manager
 
 public:

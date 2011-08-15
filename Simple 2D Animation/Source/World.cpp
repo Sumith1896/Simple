@@ -49,6 +49,7 @@ void World::Init()
 {
 	m_pNewTerrain = NewTerrain::GetInstance();
 	m_pCamera = CCamera::GetInstance();
+
 	int inew = 0;
 	int jnew = 0;
 	int knew = 0;
@@ -81,11 +82,11 @@ void World::Init()
 							chunk[i][j][k].d3dHigh.y = ((j * arrayY) + arrayY);
 							chunk[i][j][k].d3dHigh.z = ((k * arrayZ) + arrayZ);
 
-							if( (rand() % 100 + 1) <= 50)
+							if( (rand() % 100 + 1) <= 90)
 							{
 								chunk[i][j][k].BlockArray[l][m][n].SetType(BLOCK_DIRT);
 							}
-							else if( (rand() % 100 + 1) <= 50)
+							else if( (rand() % 100 + 1) <= 90)
 							{
 								chunk[i][j][k].BlockArray[l][m][n].SetType(BLOCK_ROCK);
 							}
@@ -268,8 +269,16 @@ void World::Draw()
 
 	for(int i = 0; i < drawcountdirt; i++)
 	{
-		m_pNewTerrain->Draw(2, &VisibleArrayDirt[i]);
+		#ifdef _DEBUG
+		if(i > (arrayX*arrayY*arrayZ))
+		{
+			COUT << "World::Draw() - FAIL(VisibleArrayDirt id out of array bounds)" << endl; 
+			return;
+		}
+		#endif
+		m_pNewTerrain->Draw(0, &VisibleArrayDirt[i]);
 		draw++;
+
 	}
 	for(int i = 0; i < drawcountgravel; i++)
 	{

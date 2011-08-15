@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////
 //
-//	Filename: 	CTimer.cpp
+//	Filename: 	Timer.cpp
 //
 //	Author:		Nicholas Legg
 //
@@ -10,8 +10,8 @@
 #include "Timer.h"
 
 //initialize the static variable member(s)
-CTimer *CTimer::m_pInstance = NULL;
-LONGLONG CTimer::m_llFrequency = 0;
+Timer *Timer::m_pInstance = NULL;
+LONGLONG Timer::m_llFrequency = 0;
 
 //////////////////////////////////////////////////////////////////////////
 // 
@@ -22,11 +22,11 @@ LONGLONG CTimer::m_llFrequency = 0;
 //	Purpose:		Delete the instance of the class, and set the pointer to NULL
 //
 //////////////////////////////////////////////////////////////////////////
-void CTimer::DeleteInstance()
+void Timer::DeleteInstance()
 {
 	SAFE_DELETE(m_pInstance);
 
-	COUT << "CTimer::DeleteInstance() - SUCCESS" << endl; 
+	COUT << "Timer::DeleteInstance() - SUCCESS" << endl; 
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -38,10 +38,10 @@ void CTimer::DeleteInstance()
 //	Purpose:		Creates the first instance of this class and returns it's address.
 //
 //////////////////////////////////////////////////////////////////////////
-CTimer *CTimer::GetInstance()
+Timer *Timer::GetInstance()
 {
 	if(!m_pInstance)
-		m_pInstance = new CTimer;
+		m_pInstance = new Timer;
 
 	return m_pInstance;
 }
@@ -55,7 +55,7 @@ CTimer *CTimer::GetInstance()
 //	Purpose:		Initializes the frequency and counter
 //
 //////////////////////////////////////////////////////////////////////////
-void CTimer::InitTimer()
+void Timer::InitTimer()
 {
 	LARGE_INTEGER	liFrequency;
 
@@ -85,7 +85,7 @@ void CTimer::InitTimer()
 //	Purpose:		Updates the fps
 //
 //////////////////////////////////////////////////////////////////////////
-void CTimer::UpdateFPS()
+void Timer::UpdateFPS()
 {
 	static LARGE_INTEGER liNow;
 	QueryPerformanceCounter(&liNow);
@@ -119,7 +119,7 @@ void CTimer::UpdateFPS()
 //	Purpose:		Updates the general counter
 //
 //////////////////////////////////////////////////////////////////////////
-void CTimer::Update()
+void Timer::Update()
 {
 	static LARGE_INTEGER liNow;
 
