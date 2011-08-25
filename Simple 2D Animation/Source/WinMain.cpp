@@ -129,11 +129,11 @@ int WINAPI WinMain(	HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdlin
 
 	hThreadGameUpdate = (HANDLE)_beginthreadex(NULL, 0, ThreadGameUpdate, 0, 0,  (unsigned int *)&hThreadGameUpdate);
 
-	Sleep(10);
+	Sleep(100);
 
 	hThreadWorldUpdate = (HANDLE)_beginthreadex(NULL, 0, ThreadWorldUpdate, 0, 0,  (unsigned int *)&hThreadWorldUpdate);
 
-	Sleep(10);
+	Sleep(100);
 
 	//enter main event loop
 	while(true)

@@ -570,12 +570,12 @@ void CBaseFrame::Interpolate()
 			switchy = 1;
 		}
 
-		m_fInterTime -= m_pTimer->GetFractionOfSecondsPassed();
+		m_fInterTime -= m_pTimer->GetFractionOfSecondsPassed(0);
 
 		int k = 0;
 		for(int i = 0; i < (int)m_vNodes.size(); i++)
 		{
-			m_vNodes[i]->fRotate += ((m_vDefault2[k++] - m_vNodes[i]->fRotate) / m_fInterTime) * m_pTimer->GetFractionOfSecondsPassed();
+			m_vNodes[i]->fRotate += ((m_vDefault2[k++] - m_vNodes[i]->fRotate) / m_fInterTime) * m_pTimer->GetFractionOfSecondsPassed(0);
 
 			//set the node
 			tPiece *pNextNode = m_vNodes[i]->pNode;
@@ -584,7 +584,7 @@ void CBaseFrame::Interpolate()
 			//rip through all the nodes
 			while(pNextNode)
 			{
-				pNextNode->fRotate += ((m_vDefault2[k++] - pNextNode->fRotate)  / m_fInterTime) * m_pTimer->GetFractionOfSecondsPassed();
+				pNextNode->fRotate += ((m_vDefault2[k++] - pNextNode->fRotate)  / m_fInterTime) * m_pTimer->GetFractionOfSecondsPassed(0);
 
 				pPrevNode = pNextNode;
 				pNextNode = pNextNode->pNode;
@@ -599,12 +599,12 @@ void CBaseFrame::Interpolate()
 			switchy = 2;
 		}
 
-		m_fInterTime -= m_pTimer->GetFractionOfSecondsPassed();
+		m_fInterTime -= m_pTimer->GetFractionOfSecondsPassed(0);
 
 		int k = 0;
 		for(int i = 0; i < (int)m_vNodes.size(); i++)
 		{
-			m_vNodes[i]->fRotate += ((m_vDefault3[k++] - m_vNodes[i]->fRotate) / m_fInterTime) * m_pTimer->GetFractionOfSecondsPassed();
+			m_vNodes[i]->fRotate += ((m_vDefault3[k++] - m_vNodes[i]->fRotate) / m_fInterTime) * m_pTimer->GetFractionOfSecondsPassed(0);
 
 			//set the node
 			tPiece *pNextNode = m_vNodes[i]->pNode;
@@ -613,7 +613,7 @@ void CBaseFrame::Interpolate()
 			//rip through all the nodes
 			while(pNextNode)
 			{
-				pNextNode->fRotate += ((m_vDefault3[k++] - pNextNode->fRotate)  / m_fInterTime) * m_pTimer->GetFractionOfSecondsPassed();
+				pNextNode->fRotate += ((m_vDefault3[k++] - pNextNode->fRotate)  / m_fInterTime) * m_pTimer->GetFractionOfSecondsPassed(0);
 
 				pPrevNode = pNextNode;
 				pNextNode = pNextNode->pNode;
@@ -628,12 +628,12 @@ void CBaseFrame::Interpolate()
 			switchy = 0;
 		}
 
-		m_fInterTime -= m_pTimer->GetFractionOfSecondsPassed();
+		m_fInterTime -= m_pTimer->GetFractionOfSecondsPassed(0);
 
 		int k = 0;
 		for(int i = 0; i < (int)m_vNodes.size(); i++)
 		{
-			m_vNodes[i]->fRotate += ((m_vDefault4[k++] - m_vNodes[i]->fRotate) / m_fInterTime) * m_pTimer->GetFractionOfSecondsPassed();
+			m_vNodes[i]->fRotate += ((m_vDefault4[k++] - m_vNodes[i]->fRotate) / m_fInterTime) * m_pTimer->GetFractionOfSecondsPassed(0);
 
 			//set the node
 			tPiece *pNextNode = m_vNodes[i]->pNode;
@@ -642,7 +642,7 @@ void CBaseFrame::Interpolate()
 			//rip through all the nodes
 			while(pNextNode)
 			{
-				pNextNode->fRotate += ((m_vDefault4[k++] - pNextNode->fRotate)  / m_fInterTime) * m_pTimer->GetFractionOfSecondsPassed();
+				pNextNode->fRotate += ((m_vDefault4[k++] - pNextNode->fRotate)  / m_fInterTime) * m_pTimer->GetFractionOfSecondsPassed(0);
 
 				pPrevNode = pNextNode;
 				pNextNode = pNextNode->pNode;

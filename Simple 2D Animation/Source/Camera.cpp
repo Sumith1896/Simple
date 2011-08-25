@@ -102,14 +102,14 @@ void CCamera::Move()
 
 	if(m_pDirectInput->GetKeyPressed(DIK_W))
 	{
-		m_vEyePt += vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed());
-		m_vLookAtPt += vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed());
+		m_vEyePt += vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
+		m_vLookAtPt += vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
 	}
 
 	if(m_pDirectInput->GetKeyPressed(DIK_S))
 	{
-		m_vEyePt -= vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed());
-		m_vLookAtPt -= vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed());
+		m_vEyePt -= vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
+		m_vLookAtPt -= vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
 	}
 
 	if(m_pDirectInput->GetKeyPressed(DIK_A))
@@ -117,8 +117,8 @@ void CCamera::Move()
 		D3DXVec3Cross(&vDirection,&vDirection,&m_vUp);
 		D3DXVec3Normalize(&vDirection,&vDirection);
 
-		m_vEyePt += vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed());
-		m_vLookAtPt += vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed());
+		m_vEyePt += vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
+		m_vLookAtPt += vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
 	}
 
 	if(m_pDirectInput->GetKeyPressed(DIK_D))
@@ -126,18 +126,18 @@ void CCamera::Move()
 		D3DXVec3Cross(&vDirection,&vDirection,&m_vUp);
 		D3DXVec3Normalize(&vDirection,&vDirection);
 
-		m_vEyePt -= vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed());
-		m_vLookAtPt -= vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed());
+		m_vEyePt -= vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
+		m_vLookAtPt -= vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
 	}
 
 	if(m_pDirectInput->GetKeyPressed(DIK_ADD))
 	{
-		m_fDistance -= (150.0f * m_pTimer->GetFractionOfSecondsPassed());
+		m_fDistance -= (150.0f * m_pTimer->GetFractionOfSecondsPassed(0));
 	}
 
 	if(m_pDirectInput->GetKeyPressed(DIK_SUBTRACT))
 	{
-		m_fDistance += (50.0f * m_pTimer->GetFractionOfSecondsPassed());
+		m_fDistance += (50.0f * m_pTimer->GetFractionOfSecondsPassed(0));
 	}
 }
 

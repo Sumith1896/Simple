@@ -10,18 +10,28 @@
 #include <stdio.h>
 #include "Helpers.h"
 
-class Timer  
+#define MAXTIMERS 8
+
+struct CACHE_ALIGN tTimer
+{
+	LARGE_INTEGER	liCounter;			//general counter used for everything
+	LARGE_INTEGER	liFPSCounter;		//fps only counter
+	double			fFractionOfSeconds;	//stores the amount of time between each cycle
+	int				nFrameCount;		//frame count used for frame rate
+	int				nFrameRate;			//int of the current frame rate
+	char			szFrameRate[32];	//string of the current frame rate
+};
+
+class CACHE_ALIGN Timer  
 {
 private:
 
-	LARGE_INTEGER	m_liCounter;			//general counter used for everything
-	LARGE_INTEGER	m_liFPSCounter;			//fps only counter
-	double			m_fFractionOfSeconds;	//stores the amount of time between each cycle
-	int				m_nFrameCount;			//frame count used for frame rate
-	int				m_nFrameRate;			//int of the current frame rate
-	char			m_szFrameRate[128];		//string of the current frame rate
+	tTimer	m_Timers[MAXTIMERS];	//all the different timers, 8 max for now
+	unsigned short	m_nCurrentTimer; //index of the current timer for creating them
+	LARGE_INTEGER m_liNow;
+	bool	m_bInit;	//true = init
 
-	static LONGLONG	m_llFrequency;			//frequency (never will change once system is on)
+	LONGLONG	m_llFrequency;			//frequency (never will change once system is on)
 	static	Timer *m_pInstance;			//instance to the singleton	
 
 	Timer(){};
@@ -37,8 +47,6 @@ public:
 	// 
 	//	Function: 		DeleteInstance
 	//
-	//	Last Modified: 	07/08/2006
-	//
 	//	Purpose:		Delete the instance of the class, and set the pointer to NULL
 	//
 	//////////////////////////////////////////////////////////////////////////
@@ -48,8 +56,6 @@ public:
 	// 
 	//	Function: 		GetInstance
 	//
-	//	Last Modified: 	07/08/2006
-	//
 	//	Purpose:		Creates the first instance of this class and returns it's address.
 	//
 	//////////////////////////////////////////////////////////////////////////
@@ -57,47 +63,85 @@ public:
 
 	//////////////////////////////////////////////////////////////////////////
 	// 
-	//	Function: 		InitTimer
-	//
-	//	Last Modified: 	2006/01/15
+	//	Function: 		Init
 	//
 	//	Purpose:		Initializes the frequency and counter
 	//
 	//////////////////////////////////////////////////////////////////////////
-	void InitTimer();
+	void Init();
+
+	//////////////////////////////////////////////////////////////////////////
+	// 
+	//	Function: 		CreateTimer
+	//
+	//	Purpose:		creates a new timer to use and returns the index of 
+	//					that timer, -1 will be returned if it fails
+	//
+	//////////////////////////////////////////////////////////////////////////
+	int CreateTimer();
 
 	//////////////////////////////////////////////////////////////////////////
 	// 
 	//	Function: 		RefreshFPS
 	//
-	//	Last Modified: 	2006/01/15
-	//
 	//	Purpose:		Updates the fps
 	//
 	//////////////////////////////////////////////////////////////////////////
-	void UpdateFPS();
+	void UpdateFPS(unsigned int nTimer);
 
 	//////////////////////////////////////////////////////////////////////////
 	// 
-	//	Function: 		RefreshCounter
-	//
-	//	Last Modified: 	2006/01/15
+	//	Function: 		Update
 	//
 	//	Purpose:		Updates the general counter
 	//
 	//////////////////////////////////////////////////////////////////////////
-	void Update();
+	void Update(unsigned int nTimer);
 
 	//////////////////////////////////////////////////////////////////////////
 	// 
 	//	Function: 		Inline Functions
 	//
-	//	Last Modified: 	2006/01/15
-	//
 	//	Purpose:		Inline functions to get Timer information. 
 	//
 	//////////////////////////////////////////////////////////////////////////
-	inline	char *	GetFrameRateChar()				{return m_szFrameRate;}
-	inline	int		GetFrameRateInt()				{return m_nFrameRate;}
-	inline	double	GetFractionOfSecondsPassed()	{return m_fFractionOfSeconds;}
+	char *GetFrameRateChar(unsigned int nTimer)				
+	{
+#ifdef _DEBUG
+		if(nTimer > MAXTIMERS)
+		{
+			COUT << "Timer::GetFrameRateChar() - FAIL(nTimer id out of array bounds)" << endl; 
+			assert(false);
+			return NULL;
+		}
+#endif
+		int tom  = 0;
+		return m_Timers[nTimer].szFrameRate;
+	}
+
+	int GetFrameRateInt(unsigned int nTimer)					
+	{
+#ifdef _DEBUG
+		if(nTimer > MAXTIMERS)
+		{
+			COUT << "Timer::GetFrameRateInt() - FAIL(nTimer id out of array bounds)" << endl;
+			assert(false);
+			return 0;
+		}
+#endif
+		return m_Timers[nTimer].nFrameRate;
+	}
+
+	double GetFractionOfSecondsPassed(unsigned int nTimer)	
+	{
+#ifdef _DEBUG
+		if(nTimer > MAXTIMERS)
+		{
+			COUT << "Timer::GetFractionOfSecondsPassed() - FAIL(nTimer id out of array bounds)" << endl;
+			assert(false);
+			return 0.0f;
+		}
+#endif
+		return m_Timers[nTimer].fFractionOfSeconds;
+	}
 };

@@ -84,7 +84,7 @@ void CSimpleMain::InitCSimpleMain(HWND hWnd, HINSTANCE hInstance, int nWidth, in
 	m_pSpriteManager->InitSpriteManager(m_pDirect3D->GetD3DDevice(), m_pDirect3D->GetD3DSprite());
 	m_pDirectInput->InitDirectInput(hWnd, hInstance, true);
 	m_pCamera->InitCamera();
-	m_pTimer->InitTimer();
+	m_pTimer->Init();
 	m_pBMPFont->InitBMPFont(128);
 	//m_pTerrain->InitTerrain();
 	m_pWorld->Init();
@@ -92,6 +92,9 @@ void CSimpleMain::InitCSimpleMain(HWND hWnd, HINSTANCE hInstance, int nWidth, in
 	m_pNewTerrain->InitTerrain();
 
 	m_pAnimationManager->Load2DAnimaton("test.txt");
+
+
+	m_pTimer->CreateTimer();
 
 	SetStates();
 
@@ -113,8 +116,8 @@ bool CSimpleMain::UpdateCSimpleMain()
 {
 	//check for any mouse and keyboard action
 	m_pDirectInput->ReadInput();
-	m_pTimer->UpdateFPS();
-	m_pTimer->Update();
+	m_pTimer->UpdateFPS(0);
+	m_pTimer->Update(0);
 	m_pCamera->Update();
 
 	if(!Inputs())
@@ -219,8 +222,8 @@ void CSimpleMain::Inits()
 //////////////////////////////////////////////////////////////////////////
 bool CSimpleMain::Updates()
 {
-	m_fTimer += m_pTimer->GetFractionOfSecondsPassed();
-	m_fTickFPS -= m_pTimer->GetFractionOfSecondsPassed();
+	m_fTimer += m_pTimer->GetFractionOfSecondsPassed(0);
+	m_fTickFPS -= m_pTimer->GetFractionOfSecondsPassed(0);
 
 	if(m_fTickFPS < 0.0f)
 	{
@@ -267,7 +270,8 @@ bool CSimpleMain::Draws()
 	char buffer[64];
 	sprintf(buffer, "Draw Count: %d", m_pWorld->draw);
 
-	m_pBMPFont->DrawString(nBMP, m_pTimer->GetFrameRateChar(), 0.0f, 0.0f, temp, 0.25f);
+	m_pBMPFont->DrawString(nBMP, m_pTimer->GetFrameRateChar(1), 0.0f, 0.0f, temp, 0.25f);
+	m_pBMPFont->DrawString(nBMP, m_pTimer->GetFrameRateChar(0), 0.0f, 32.0f, temp, 0.25f);
 	m_pBMPFont->DrawString(nBMP, buffer, 0.0f, 64.0f, temp, 0.25f);
 
 	

@@ -2,8 +2,6 @@
 //
 //	Filename: 	Timer.cpp
 //
-//	Author:		Nicholas Legg
-//
 //	Purpose:	high frequency timer
 //
 //////////////////////////////////////////////////////////////////////////
@@ -11,13 +9,10 @@
 
 //initialize the static variable member(s)
 Timer *Timer::m_pInstance = NULL;
-LONGLONG Timer::m_llFrequency = 0;
 
 //////////////////////////////////////////////////////////////////////////
 // 
 //	Function: 		DeleteInstance
-//
-//	Last Modified: 	07/08/2006
 //
 //	Purpose:		Delete the instance of the class, and set the pointer to NULL
 //
@@ -33,101 +28,137 @@ void Timer::DeleteInstance()
 // 
 //	Function: 		GetInstance
 //
-//	Last Modified: 	07/08/2006
-//
 //	Purpose:		Creates the first instance of this class and returns it's address.
 //
 //////////////////////////////////////////////////////////////////////////
 Timer *Timer::GetInstance()
 {
 	if(!m_pInstance)
+	{
 		m_pInstance = new Timer;
+		m_pInstance->m_bInit = false;
+	}
+
+	COUT << "Timer::GetInstance() - SUCCESS" << endl; 
 
 	return m_pInstance;
 }
 
 //////////////////////////////////////////////////////////////////////////
 // 
-//	Function: 		InitTimer
-//
-//	Last Modified: 	2006/01/15
+//	Function: 		Init
 //
 //	Purpose:		Initializes the frequency and counter
 //
 //////////////////////////////////////////////////////////////////////////
-void Timer::InitTimer()
+void Timer::Init()
 {
+	if(m_bInit)
+	{
+		return;
+	}
+
+	//we don't want to initialize this twice
+	m_bInit = true;
+
 	LARGE_INTEGER	liFrequency;
+
+	m_nCurrentTimer = 0;
 
 	//get frequency, this will only be done once as it will never change while the computer is on
 	QueryPerformanceFrequency(&liFrequency);
 
-	//set our longlong frequency (will never change)
-	if(!m_llFrequency)
-		m_llFrequency = liFrequency.QuadPart;
+	m_llFrequency = liFrequency.QuadPart;
 
-	//set all to 0
-	m_nFrameCount			= 0;
-	m_nFrameRate			= 0;
-	m_fFractionOfSeconds	= 0.0f;
-
-	//set both counters to the latest value
-	QueryPerformanceCounter(&m_liCounter);
-	QueryPerformanceCounter(&m_liFPSCounter);
+	ZeroMemory(&m_Timers, (sizeof(tTimer)*MAXTIMERS));
 }
 
 //////////////////////////////////////////////////////////////////////////
 // 
-//	Function: 		RefreshFPS
+//	Function: 		CreateTimer
 //
-//	Last Modified: 	2006/01/15
+//	Purpose:		creates a new timer to use and returns the index of 
+//					that timer, -1 will be returned if it fails
+//
+//////////////////////////////////////////////////////////////////////////
+int Timer::CreateTimer()
+{
+	//no more timers can be made
+	if(m_nCurrentTimer >= MAXTIMERS)
+	{
+		return -1;
+	}
+
+	//set both counters to the latest value
+	QueryPerformanceCounter(&m_Timers[m_nCurrentTimer].liCounter);
+	QueryPerformanceCounter(&m_Timers[m_nCurrentTimer].liFPSCounter);
+
+	return m_nCurrentTimer++;
+}
+
+//////////////////////////////////////////////////////////////////////////
+// 
+//	Function: 		UpdateFPS
 //
 //	Purpose:		Updates the fps
 //
 //////////////////////////////////////////////////////////////////////////
-void Timer::UpdateFPS()
+void Timer::UpdateFPS(unsigned int nTimer)
 {
-	static LARGE_INTEGER liNow;
-	QueryPerformanceCounter(&liNow);
+#ifdef _DEBUG
+	if(nTimer > MAXTIMERS)
+	{
+		COUT << "Timer::UpdateFPS() - FAIL(nTimer id out of array bounds)" << endl;
+		assert(false);
+		return;
+	}
+#endif
+
+	QueryPerformanceCounter(&m_liNow);
 
 	//subject counters and then check to see if 1 second passed
-	if((liNow.QuadPart - m_liFPSCounter.QuadPart) > m_llFrequency)
+	if((m_liNow.QuadPart - m_Timers[nTimer].liFPSCounter.QuadPart) > m_llFrequency)
 	{
 		//set frame rate to current frame count
-		m_nFrameRate = m_nFrameCount;
+		m_Timers[nTimer].nFrameRate = m_Timers[nTimer].nFrameCount;
 
 		//set frame count back to 0
-		m_nFrameCount = 0;
+		m_Timers[nTimer].nFrameCount = 0;
 
 		//make a nice pretty char[] for displaying the fps
-		sprintf(m_szFrameRate, "FPS %d", m_nFrameRate);
+		sprintf(m_Timers[nTimer].szFrameRate, "FPS %d", m_Timers[nTimer].nFrameRate);
 
 		//update fps counter with the latest value
-		QueryPerformanceCounter(&m_liFPSCounter);
+		QueryPerformanceCounter(&m_Timers[nTimer].liFPSCounter);
 	}
 
 	//increment frame count by 1
-	m_nFrameCount++;
+	m_Timers[nTimer].nFrameCount++;
 }
 
 //////////////////////////////////////////////////////////////////////////
 // 
-//	Function: 		RefreshCounter
-//
-//	Last Modified: 	2006/01/15
+//	Function: 		Update
 //
 //	Purpose:		Updates the general counter
 //
 //////////////////////////////////////////////////////////////////////////
-void Timer::Update()
+void Timer::Update(unsigned int nTimer)
 {
-	static LARGE_INTEGER liNow;
+#ifdef _DEBUG
+	if(nTimer > MAXTIMERS)
+	{
+		COUT << "Timer::UpdateFPS() - FAIL(nTimer id out of array bounds)" << endl;
+		assert(false);
+		return;
+	}
+#endif
 
-	liNow = m_liCounter;
+	m_liNow = m_Timers[nTimer].liCounter;
 
 	//update the counter with the latest value
-	QueryPerformanceCounter(&m_liCounter);
+	QueryPerformanceCounter(&m_Timers[nTimer].liCounter);
 
 	//calculate amount of time that the cycle took and store the value as a double
-	m_fFractionOfSeconds =  ((m_liCounter.QuadPart - liNow.QuadPart)/(double)m_llFrequency);
+	m_Timers[nTimer].fFractionOfSeconds =  ((m_Timers[nTimer].liCounter.QuadPart - m_liNow.QuadPart)/(double)m_llFrequency);
 }

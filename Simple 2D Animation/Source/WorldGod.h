@@ -9,11 +9,33 @@
 #pragma once
 #include <Windows.h>
 #include <stdio.h>
+#include <fstream>
 #include "Helpers.h"
+#include "Timer.h"
+#include "Camera.h"
+#include "BlockObject.h"
+#include <vector>
+#include <list>
+using std::vector;
+using std::list;
 
-class WorldGod  
+#define BLOCKARRAY_SIZE 8
+
+struct CACHE_ALIGN WorldChunk2
+{
+	BlockObject				BlockArray[BLOCKARRAY_SIZE][BLOCKARRAY_SIZE][BLOCKARRAY_SIZE];
+	list<BlockObject*>		VisibleArray;
+	D3DXVECTOR3				d3dHigh;		//high values of the bounding
+	D3DXVECTOR3				d3dLow;			//low values of the bounding
+};
+
+class CACHE_ALIGN WorldGod  
 {
 private:
+
+	CCamera			*m_pCamera;
+	Timer			*m_pTimer;
+	int timernick;
 
 	static	WorldGod *m_pInstance;			//instance to the singleton	
 
@@ -115,4 +137,14 @@ public:
 	//
 	//////////////////////////////////////////////////////////////////////////
 	void Cull();
+
+	//////////////////////////////////////////////////////////////////////////
+	// 
+	//	Function: 		Generate
+	//
+	//	Purpose:		we don't have an terrain around the player it needs to 
+	//					be generated
+	//
+	//////////////////////////////////////////////////////////////////////////
+	void Generate();
 };
