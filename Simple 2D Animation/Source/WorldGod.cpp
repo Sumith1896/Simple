@@ -80,8 +80,8 @@ void WorldGod::Shutdown()
 bool WorldGod::Update()
 {
 
-	m_pTimer->UpdateFPS(timernick);
-	m_pTimer->Update(timernick);
+	m_pTimer->UpdateFPS(1);
+	m_pTimer->Update(1);
 
 	for(int i = 0; i < 999; i++)
 	{

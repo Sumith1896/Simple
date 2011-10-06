@@ -118,6 +118,7 @@ bool CSimpleMain::UpdateCSimpleMain()
 	m_pDirectInput->ReadInput();
 	m_pTimer->UpdateFPS(0);
 	m_pTimer->Update(0);
+
 	m_pCamera->Update();
 
 	if(!Inputs())
@@ -270,9 +271,9 @@ bool CSimpleMain::Draws()
 	char buffer[64];
 	sprintf(buffer, "Draw Count: %d", m_pWorld->draw);
 
-	m_pBMPFont->DrawString(nBMP, m_pTimer->GetFrameRateChar(1), 0.0f, 0.0f, temp, 0.25f);
-	m_pBMPFont->DrawString(nBMP, m_pTimer->GetFrameRateChar(0), 0.0f, 32.0f, temp, 0.25f);
-	m_pBMPFont->DrawString(nBMP, buffer, 0.0f, 64.0f, temp, 0.25f);
+	m_pBMPFont->DrawString(nBMP, m_pTimer->GetFrameRateChar(1), 0.0f, 32.0f, temp, 0.25f);
+	m_pBMPFont->DrawString(nBMP, m_pTimer->GetFrameRateChar(0), 0.0f, 64.0f, temp, 0.25f);
+	m_pBMPFont->DrawString(nBMP, buffer, 0.0f, 96.0f, temp, 0.25f);
 
 	
 
