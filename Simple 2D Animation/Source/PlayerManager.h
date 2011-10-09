@@ -9,6 +9,8 @@
 //////////////////////////////////////////////////////////////////////////
 #pragma once
 #include "Helpers.h"
+#include <list>
+using std::list;
 
 struct CACHE_ALIGN Player
 {
@@ -18,11 +20,21 @@ struct CACHE_ALIGN Player
 	float					fAcceleration;		//rate at which the player increases speed
 };
 
+struct CACHE_ALIGN PlayerPacket
+{
+	unsigned int		nType;	//the type of packet we're receiving
+	unsigned int		nValue;	//the value of the packet we're receiving
+	unsigned int		nStamp;	//number of this packet
+};
+
 class CACHE_ALIGN PlayerManager  
 {
 private:
 
 	Player		m_player;	//the player!
+
+	list<PlayerPacket> m_vPlayerPackets;	//list of all the packets not processed
+	unsigned int	m_nCurrentStamp;	//current number stamp for the packets
 
 	static	PlayerManager *m_pInstance;			//instance to the singleton	
 
@@ -77,5 +89,7 @@ public:
 	//					player can be updated.
 	//
 	//////////////////////////////////////////////////////////////////////////
-	void Update();
+	void SendPacket(const PlayerPacket &Packet);
+
+	void UpdatePlayers();
 };
