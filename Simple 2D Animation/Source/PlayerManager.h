@@ -12,6 +12,12 @@
 #include <list>
 using std::list;
 
+#define PLAYERS_MAX 8
+#define PLAYERS_PACKET_MOVE_FORWARD		1
+#define PLAYERS_PACKET_MOVE_BACKWARD	2
+#define PLAYERS_PACKET_MOVE_LEFT		3
+#define PLAYERS_PACKET_MOVE_RIGHT		4
+
 struct CACHE_ALIGN Player
 {
 	D3DXVECTOR3				d3dPosition;		//position of the player in the world
@@ -22,20 +28,25 @@ struct CACHE_ALIGN Player
 
 struct CACHE_ALIGN PlayerPacket
 {
-	unsigned int		nType;	//the type of packet we're receiving
-	unsigned int		nValue;	//the value of the packet we're receiving
-	unsigned int		nStamp;	//number of this packet
+	unsigned int		nType;		//the type of packet we're receiving
+	union
+	{
+		int					nValue;		//the value of the packet we're receiving
+		unsigned int		uValue;		//the value of the packet we're receiving
+		float				fValue;		//the value of the packet we're receiving
+	};
+	unsigned int		nStamp;		//number of this packet
+	unsigned int		nPlayer;	//the player this packet is for
 };
 
 class CACHE_ALIGN PlayerManager  
 {
 private:
 
-	Player		m_player;	//the player!
-
-	list<PlayerPacket> m_vPlayerPackets;	//list of all the packets not processed
-	unsigned int	m_nCurrentStamp;	//current number stamp for the packets
-
+	Player		m_vPlayers[PLAYERS_MAX];		//the players!
+	unsigned int m_nPlayers;					//number of players in the world
+	list<PlayerPacket> m_vPlayerPackets;		//list of all the packets not processed
+	unsigned int	m_nCurrentStamp;			//current number stamp for the packets
 	static	PlayerManager *m_pInstance;			//instance to the singleton	
 
 	PlayerManager(){};
@@ -50,8 +61,8 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	//INLINES
 	//////////////////////////////////////////////////////////////////////////
-	inline D3DXVECTOR3 GetPosition(){return m_player.d3dPosition;}
-	inline D3DXVECTOR3 GetLookAt(){return m_player.d3dLookAt;}
+	inline D3DXVECTOR3 GetPosition(const unsigned int nPlayer){return m_vPlayers[nPlayer].d3dPosition;}
+	inline D3DXVECTOR3 GetLookAt(const unsigned int nPlayer){return m_vPlayers[nPlayer].d3dLookAt;}
 
 	//////////////////////////////////////////////////////////////////////////
 	// 
@@ -82,14 +93,30 @@ public:
 
 	//////////////////////////////////////////////////////////////////////////
 	// 
-	//	Function: 		Update
+	//	Function: 		Create Player
 	//
-	//	Purpose:		General update for the player.
-	//					This will branch out into all the different ways a 
-	//					player can be updated.
+	//	Purpose:		Creates a player for the world
+	//
+	//	Return;			-1 means it failed to create another player
+	//
+	//////////////////////////////////////////////////////////////////////////
+	int CreatePlayer(Player &newPlayer);
+
+	//////////////////////////////////////////////////////////////////////////
+	// 
+	//	Function: 		SendPacket
+	//
+	//	Purpose:		Calling this will insert a player packet into the list
 	//
 	//////////////////////////////////////////////////////////////////////////
 	void SendPacket(const PlayerPacket &Packet);
 
+	//////////////////////////////////////////////////////////////////////////
+	// 
+	//	Function: 		UpdatePlayers
+	//
+	//	Purpose:		Goes through the list and updates the players
+	//
+	//////////////////////////////////////////////////////////////////////////
 	void UpdatePlayers();
 };

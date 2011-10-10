@@ -51,18 +51,44 @@ PlayerManager *PlayerManager::GetInstance()
 bool PlayerManager::Init()
 {
 	//zero out the player struct
-	memset(&m_player, 0, sizeof(Player));
+	memset(&m_vPlayers, 0, sizeof(Player) * PLAYERS_MAX);
+
+
+	//zero players to start
+	m_nPlayers = 0;
 
 	return true;
 }
 
 //////////////////////////////////////////////////////////////////////////
 // 
+//	Function: 		Create Player
+//
+//	Purpose:		Creates a player for the world
+//
+//	Return;			-1 means it failed to create another player
+//
+//////////////////////////////////////////////////////////////////////////
+int PlayerManager::CreatePlayer(Player &newPlayer)
+{
+	//no room for more player
+	if(m_nPlayers > PLAYERS_MAX)
+	{
+		return -1;
+	}
+
+	//copy the values over
+	memcpy(&m_vPlayers[m_nPlayers], &newPlayer, sizeof(Player));
+
+	//return the current player index
+	return m_nPlayers++;
+}
+
+//////////////////////////////////////////////////////////////////////////
+// 
 //	Function: 		SendPacket
 //
-//	Purpose:		General update for the player.
-//					This will branch out into all the different ways a 
-//					player can be updated.
+//	Purpose:		Calling this will insert a player packet into the list
 //
 //////////////////////////////////////////////////////////////////////////
 void PlayerManager::SendPacket(const PlayerPacket &Packet)
@@ -81,12 +107,19 @@ void PlayerManager::SendPacket(const PlayerPacket &Packet)
 // 
 //	Function: 		UpdatePlayers
 //
-//	Purpose:		General update for the player.
-//					This will branch out into all the different ways a 
-//					player can be updated.
+//	Purpose:		Goes through the list and updates the players
 //
 //////////////////////////////////////////////////////////////////////////
 void PlayerManager::UpdatePlayers()
 {
+	PlayerPacket tempPlayerPacket;
 
+	//loop through the list grabbing the values and popping them off
+	while (!m_vPlayerPackets.empty())
+	{
+		tempPlayerPacket = m_vPlayerPackets.back();
+		m_vPlayerPackets.pop_back();
+
+
+	}
 }
