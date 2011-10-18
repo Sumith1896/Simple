@@ -115,11 +115,48 @@ void PlayerManager::UpdatePlayers()
 	PlayerPacket tempPlayerPacket;
 
 	//loop through the list grabbing the values and popping them off
-	while (!m_vPlayerPackets.empty())
+	while(!m_vPlayerPackets.empty())
 	{
 		tempPlayerPacket = m_vPlayerPackets.back();
 		m_vPlayerPackets.pop_back();
 
+		//all the different player packets
+		switch(tempPlayerPacket.nType)
+		{
+			//move player forward
+		case 1: 
+			{
+				m_vPlayers[tempPlayerPacket.nPlayer].d3dPosition.z += tempPlayerPacket.fValue;
+				break;
+			}
+			//move player backwards
+		case 2: 
+			{
+				m_vPlayers[tempPlayerPacket.nPlayer].d3dPosition.z -= tempPlayerPacket.fValue;
+				break;
+			}
+			//move player left
+		case 3: 
+			{
+				m_vPlayers[tempPlayerPacket.nPlayer].d3dPosition.x -= tempPlayerPacket.fValue;
+				break;
+			}
+			//move player right
+		case 4: 
+			{
+				m_vPlayers[tempPlayerPacket.nPlayer].d3dPosition.x += tempPlayerPacket.fValue;
+				break;
+			}
+		default :
+			{
+				break;
+			}
+		}
+		//////////////////////////////////////////////////////////////////
+		//update position
+
+		//////////////////////////////////////////////////////////////////
+		//update lookat
 
 	}
 }
