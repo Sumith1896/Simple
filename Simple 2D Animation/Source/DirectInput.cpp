@@ -2,26 +2,22 @@
 //
 //	Filename: 	DirectInput.cpp
 //
-//	Author:		Nicholas Legg
-//
 //	Purpose:	Controls the input system
 //
 //////////////////////////////////////////////////////////////////////////
 #include "DirectInput.h"
 
 //	Initialize the static variable member.
-CDirectInput *CDirectInput::m_pInstance = NULL;
+DirectInput *DirectInput::m_pInstance = NULL;
 
 //////////////////////////////////////////////////////////////////////////
 // 
 //	Function: 		Constructor
 //
-//	Last Modified: 	07/08/2006
-//
 //	Purpose:		you know what this does =p
 //
 //////////////////////////////////////////////////////////////////////////
-CDirectInput::CDirectInput()
+DirectInput::DirectInput()
 {
 	m_pDIObject			= NULL;
 	m_pDIKey			= NULL;
@@ -34,12 +30,10 @@ CDirectInput::CDirectInput()
 // 
 //	Function: 		DeleteInstance
 //
-//	Last Modified: 	07/08/2006
-//
 //	Purpose:		Delete the instance of the class, and set the pointer to NULL
 //
 //////////////////////////////////////////////////////////////////////////
-void CDirectInput::DeleteInstance()
+void DirectInput::DeleteInstance()
 {
 	SAFE_DELETE(m_pInstance);
 }
@@ -48,15 +42,13 @@ void CDirectInput::DeleteInstance()
 // 
 //	Function: 		GetInstance
 //
-//	Last Modified: 	07/08/2006
-//
 //	Purpose:		Creates the first instance of this class and returns it's address.
 //
 //////////////////////////////////////////////////////////////////////////
-CDirectInput *CDirectInput::GetInstance()
+DirectInput *DirectInput::GetInstance()
 {
 	if(!m_pInstance)
-		m_pInstance = new CDirectInput;
+		m_pInstance = new DirectInput;
 
 	return m_pInstance;
 }
@@ -65,16 +57,16 @@ CDirectInput *CDirectInput::GetInstance()
 // 
 //	Function: 		InitDirectInput
 //
-//	Last Modified: 	2006/08/04
-//
 //	Purpose:		Initializes the input class (keyboard & mouse)
 //
 //////////////////////////////////////////////////////////////////////////
-bool CDirectInput::InitDirectInput(HWND hWnd, HINSTANCE hInstance, bool bExclusive)
+bool DirectInput::InitDirectInput(HWND hWnd, HINSTANCE hInstance, bool bExclusive)
 {
 	//	Make sure DirectInput, the mouse or keyboard hasn't already been initialized.
-	if(m_pDIObject || m_pDIMouse || m_pDIKey)	
+	if(m_pDIObject || m_pDIMouse || m_pDIKey)
+	{
 		return false;
+	}
 
 	//	Initialize the Direct Input COM object.
 	if(FAILED(DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_pDIObject, NULL)))
@@ -87,9 +79,13 @@ bool CDirectInput::InitDirectInput(HWND hWnd, HINSTANCE hInstance, bool bExclusi
 
 	//	Set the Cooperative Level for the Mouse.
 	if(bExclusive)
+	{
 		m_pDIMouse->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_EXCLUSIVE);
+	}
 	else
+	{
 		m_pDIMouse->SetCooperativeLevel(hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE);
+	}
 
 
 	//	Set the Data format for the mouse.
@@ -115,9 +111,13 @@ bool CDirectInput::InitDirectInput(HWND hWnd, HINSTANCE hInstance, bool bExclusi
 
 	//	Set the Cooperative level for the keyboard.
 	if (bExclusive)
+	{
 		m_pDIKey->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_EXCLUSIVE);
+	}
 	else
+	{
 		m_pDIKey->SetCooperativeLevel(hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE);
+	}
 
 	//Set the Data Format for the keyboard.
 	m_pDIKey->SetDataFormat(&c_dfDIKeyboard);
@@ -133,12 +133,10 @@ bool CDirectInput::InitDirectInput(HWND hWnd, HINSTANCE hInstance, bool bExclusi
 // 
 //	Function: 		Shutdown
 //
-//	Last Modified: 	2006/08/04
-//
 //	Purpose:		Shuts down the Input objects
 //
 //////////////////////////////////////////////////////////////////////////
-void CDirectInput::Shutdown(void)
+void DirectInput::Shutdown(void)
 {
 	//Release the Mouse.
 	if(m_pDIMouse)
@@ -162,12 +160,10 @@ void CDirectInput::Shutdown(void)
 // 
 //	Function: 		ReadInput
 //
-//	Last Modified: 	2006/08/04
-//
 //	Purpose:		Reads the keyboard and mouse
 //
 //////////////////////////////////////////////////////////////////////////
-bool CDirectInput::ReadInput(void)
+bool DirectInput::ReadInput(void)
 {
 	//copy the old data to the keyboard buffer
 	memcpy(m_KeyBuffered, m_KeyBuffer, 256 * sizeof(char));
@@ -195,16 +191,16 @@ bool CDirectInput::ReadInput(void)
 // 
 //	Function: 		KeyPressed
 //
-//	Last Modified: 	2006/08/04
-//
 //	Purpose:		Checks if the key was pushed
 //
 //////////////////////////////////////////////////////////////////////////
-bool CDirectInput::GetKeyPressed(int Key)
+bool DirectInput::GetKeyPressed(int Key)
 {
 	//Check to see if the key was pressed.
 	if (m_KeyBuffer[Key] & 0x80)
+	{
 		return true;
+	}
 
 	//The Key was not Pressed.
 	return false;
@@ -214,20 +210,22 @@ bool CDirectInput::GetKeyPressed(int Key)
 // 
 //	Function: 		KeyPressed
 //
-//	Last Modified: 	2006/08/04
-//
 //	Purpose:		Checks if the key was pushed
 //
 //////////////////////////////////////////////////////////////////////////
-bool CDirectInput::GetKeyPressedBuffered(int Key)
+bool DirectInput::GetKeyPressedBuffered(int Key)
 {
 	//check to see if it was checked before
 	if(m_KeyBuffered[Key] & 0x80)
+	{
 		return false;
+	}
 
 	//Check to see if the key was pressed.
 	if (m_KeyBuffer[Key] & 0x80)
+	{
 		return true;
+	}
 
 	//The Key was not Pressed.
 	return false;
@@ -237,16 +235,16 @@ bool CDirectInput::GetKeyPressedBuffered(int Key)
 // 
 //	Function: 		GetMouseButton
 //
-//	Last Modified: 	2006/08/04
-//
 //	Purpose:		Checks if the mouse button was pushed
 //
 //////////////////////////////////////////////////////////////////////////
-bool CDirectInput::GetMouseButton(int Button)
+bool DirectInput::GetMouseButton(int Button)
 {
 	//	Check to see if the Mouse Button was pressed.
 	if (m_diMouseState.rgbButtons[Button] & 0x80)
+	{
 		return true;
+	}
 
 	//	Button Not Pressed.
 	return false;
@@ -256,20 +254,22 @@ bool CDirectInput::GetMouseButton(int Button)
 // 
 //	Function: 		GetMouseButtonBuffered
 //
-//	Last Modified: 	2006/08/04
-//
 //	Purpose:		Checks if the mouse button was pushed (buffered)
 //
 //////////////////////////////////////////////////////////////////////////
-bool CDirectInput::GetMouseButtonBuffered(int Button)
+bool DirectInput::GetMouseButtonBuffered(int Button)
 {
 	//Check to see if the Mouse Button was pressed before.
 	if(m_MouseBuffered[Button] & 0x80)
+	{
 		return false;
+	}
 
 	//Check to see if the key was pressed.
 	if(m_diMouseState.rgbButtons[Button] & 0x80)
+	{
 		return true;
+	}
 
 	//Button Not Pressed.
 	return false;
@@ -279,12 +279,10 @@ bool CDirectInput::GetMouseButtonBuffered(int Button)
 // 
 //	Function: 		GetMouseAxis
 //
-//	Last Modified: 	2006/08/04
-//
 //	Purpose:		Return the value from an axis
 //
 //////////////////////////////////////////////////////////////////////////
-long CDirectInput::GetMouseAxis(long lAxis)
+long DirectInput::GetMouseAxis(long lAxis)
 {
 	//Check the Axis and return its state.
 	switch (lAxis)

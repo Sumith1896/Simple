@@ -57,7 +57,6 @@ CCamera *CCamera::GetInstance()
 void CCamera::InitCamera()
 {
 	m_pDirectX		= CDirectX9::GetInstance();
-	m_pDirectInput	= CDirectInput::GetInstance();
 	m_pTimer		= Timer::GetInstance();
 
 	m_vLookAtPt = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -96,49 +95,49 @@ void CCamera::Update()
 //////////////////////////////////////////////////////////////////////////
 void CCamera::Move()
 {
-	D3DXVECTOR3 vDirection;
+	//D3DXVECTOR3 vDirection;
 
-	D3DXVec3Normalize(&vDirection,&(m_vLookAtPt - m_vEyePt));
+	//D3DXVec3Normalize(&vDirection,&(m_vLookAtPt - m_vEyePt));
 
-	if(m_pDirectInput->GetKeyPressed(DIK_W))
-	{
-		m_vEyePt += vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
-		m_vLookAtPt += vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
-	}
+	//if(m_pDirectInput->GetKeyPressed(DIK_W))
+	//{
+	//	m_vEyePt += vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
+	//	m_vLookAtPt += vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
+	//}
 
-	if(m_pDirectInput->GetKeyPressed(DIK_S))
-	{
-		m_vEyePt -= vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
-		m_vLookAtPt -= vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
-	}
+	//if(m_pDirectInput->GetKeyPressed(DIK_S))
+	//{
+	//	m_vEyePt -= vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
+	//	m_vLookAtPt -= vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
+	//}
 
-	if(m_pDirectInput->GetKeyPressed(DIK_A))
-	{
-		D3DXVec3Cross(&vDirection,&vDirection,&m_vUp);
-		D3DXVec3Normalize(&vDirection,&vDirection);
+	//if(m_pDirectInput->GetKeyPressed(DIK_A))
+	//{
+	//	D3DXVec3Cross(&vDirection,&vDirection,&m_vUp);
+	//	D3DXVec3Normalize(&vDirection,&vDirection);
 
-		m_vEyePt += vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
-		m_vLookAtPt += vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
-	}
+	//	m_vEyePt += vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
+	//	m_vLookAtPt += vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
+	//}
 
-	if(m_pDirectInput->GetKeyPressed(DIK_D))
-	{
-		D3DXVec3Cross(&vDirection,&vDirection,&m_vUp);
-		D3DXVec3Normalize(&vDirection,&vDirection);
+	//if(m_pDirectInput->GetKeyPressed(DIK_D))
+	//{
+	//	D3DXVec3Cross(&vDirection,&vDirection,&m_vUp);
+	//	D3DXVec3Normalize(&vDirection,&vDirection);
 
-		m_vEyePt -= vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
-		m_vLookAtPt -= vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
-	}
+	//	m_vEyePt -= vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
+	//	m_vLookAtPt -= vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
+	//}
 
-	if(m_pDirectInput->GetKeyPressed(DIK_ADD))
-	{
-		m_fDistance -= (150.0f * m_pTimer->GetFractionOfSecondsPassed(0));
-	}
+	//if(m_pDirectInput->GetKeyPressed(DIK_ADD))
+	//{
+	//	m_fDistance -= (150.0f * m_pTimer->GetFractionOfSecondsPassed(0));
+	//}
 
-	if(m_pDirectInput->GetKeyPressed(DIK_SUBTRACT))
-	{
-		m_fDistance += (50.0f * m_pTimer->GetFractionOfSecondsPassed(0));
-	}
+	//if(m_pDirectInput->GetKeyPressed(DIK_SUBTRACT))
+	//{
+	//	m_fDistance += (50.0f * m_pTimer->GetFractionOfSecondsPassed(0));
+	//}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -152,17 +151,17 @@ void CCamera::Move()
 //////////////////////////////////////////////////////////////////////////
 void CCamera::Rotate()
 {
-	D3DXVECTOR3 vRotAxis;
-	D3DXMATRIX matRotAxis,matRotZ;
+	//D3DXVECTOR3 vRotAxis;
+	//D3DXMATRIX matRotAxis,matRotZ;
 
-	D3DXVec3Normalize(&m_vDirection,&(m_vLookAtPt - m_vEyePt));
-	D3DXVec3Cross(&vRotAxis,&m_vDirection,&m_vUp);
-	D3DXVec3Normalize(&vRotAxis,&vRotAxis);
+	//D3DXVec3Normalize(&m_vDirection,&(m_vLookAtPt - m_vEyePt));
+	//D3DXVec3Cross(&vRotAxis,&m_vDirection,&m_vUp);
+	//D3DXVec3Normalize(&vRotAxis,&vRotAxis);
 
-	D3DXMatrixRotationAxis(&matRotAxis,&vRotAxis, (float)m_pDirectInput->GetMouseAxis(YAXIS)/360);
-	D3DXMatrixRotationY(&matRotZ,(float)m_pDirectInput->GetMouseAxis(XAXIS)/360);
+	//D3DXMatrixRotationAxis(&matRotAxis,&vRotAxis, (float)m_pDirectInput->GetMouseAxis(YAXIS)/360);
+	//D3DXMatrixRotationY(&matRotZ,(float)m_pDirectInput->GetMouseAxis(XAXIS)/360);
 
-	D3DXVec3TransformCoord(&m_vDirection,&m_vDirection,&(matRotAxis * matRotZ));
-	D3DXVec3TransformCoord(&m_vUp,&m_vUp,&(matRotAxis * matRotZ));
-	m_vLookAtPt = m_vDirection + m_vEyePt;
+	//D3DXVec3TransformCoord(&m_vDirection,&m_vDirection,&(matRotAxis * matRotZ));
+	//D3DXVec3TransformCoord(&m_vUp,&m_vUp,&(matRotAxis * matRotZ));
+	//m_vLookAtPt = m_vDirection + m_vEyePt;
 }

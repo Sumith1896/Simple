@@ -14,7 +14,6 @@
 #include "Helpers.h"	//some helpful defines
 #include "Direct3D.h"
 #include "TextureManager.h"
-#include "DirectInput.h"
 #include "SpriteManager.h"
 #include "BaseFrame.h"
 #include "Timer.h"
@@ -47,7 +46,6 @@ private:
 	CBaseFrame			m_Base;
 	CDirectX9			*m_pDirect3D;		//pointer to the d3d singleton
 	CTextureManager		*m_pTextureManager;	//pointer to the texture manager singleton
-	CDirectInput		*m_pDirectInput;	//pointer to the direct input singleton
 	CSpriteManager		*m_pSpriteManager;	//pointer to the sprite manager singleton
 	Timer				*m_pTimer;
 	CAnimationManager	*m_pAnimationManager;	

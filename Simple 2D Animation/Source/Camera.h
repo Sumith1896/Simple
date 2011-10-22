@@ -19,7 +19,6 @@ private:
 
 	Timer						*m_pTimer;				//timer pointer
 	CDirectX9					*m_pDirectX;			//directx9 pointer
-	CDirectInput				*m_pDirectInput;		//directinput pointer
 
 	
 	D3DXVECTOR3					m_vEyePt;				//where the eye is in the world

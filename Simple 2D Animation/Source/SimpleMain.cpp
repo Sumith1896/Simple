@@ -67,7 +67,6 @@ void CSimpleMain::InitCSimpleMain(HWND hWnd, HINSTANCE hInstance, int nWidth, in
 	m_pDirect3D			= CDirectX9::GetInstance();
 	m_pTextureManager	= CTextureManager::GetInstance();
 	m_pSpriteManager	= CSpriteManager::GetInstance();
-	m_pDirectInput		= CDirectInput::GetInstance();
 	m_pTimer			= Timer::GetInstance();
 	m_pAnimationManager	= CAnimationManager::GetInstance();
 	m_pBMPFont			= CBMPFont::GetInstance();
@@ -82,7 +81,6 @@ void CSimpleMain::InitCSimpleMain(HWND hWnd, HINSTANCE hInstance, int nWidth, in
 	m_pDirect3D->InitDirectX9(hWnd, nWidth, nHeight, bWindowed, true);
 	m_pTextureManager->InitTextureManager(m_pDirect3D->GetD3DDevice());
 	m_pSpriteManager->InitSpriteManager(m_pDirect3D->GetD3DDevice(), m_pDirect3D->GetD3DSprite());
-	m_pDirectInput->InitDirectInput(hWnd, hInstance, true);
 	m_pCamera->InitCamera();
 	m_pTimer->Init();
 	m_pBMPFont->InitBMPFont(128);
@@ -114,8 +112,6 @@ void CSimpleMain::InitCSimpleMain(HWND hWnd, HINSTANCE hInstance, int nWidth, in
 //////////////////////////////////////////////////////////////////////////
 bool CSimpleMain::UpdateCSimpleMain()
 {
-	//check for any mouse and keyboard action
-	m_pDirectInput->ReadInput();
 	m_pTimer->UpdateFPS(0);
 	m_pTimer->Update(0);
 
@@ -297,8 +293,6 @@ bool CSimpleMain::Draws()
 //////////////////////////////////////////////////////////////////////////
 void CSimpleMain::ShutDowns()
 {
-	//shut down all the singletons in reverse order
-	m_pDirectInput->Shutdown();
 	Sleep(50);
 	m_pSpriteManager->Shutdown();
 	Sleep(50);
@@ -307,8 +301,6 @@ void CSimpleMain::ShutDowns()
 	m_pDirect3D->ShutdownDirectX9();
 	Sleep(50);
 
-	//delete the pointers
-	m_pDirectInput->DeleteInstance();
 	Sleep(50);
 	m_pSpriteManager->DeleteInstance();
 	Sleep(50);
@@ -331,63 +323,63 @@ void CSimpleMain::ShutDowns()
 //////////////////////////////////////////////////////////////////////////
 bool CSimpleMain::Inputs()
 {
-	static double move = 0.0f;
-	if(m_pDirectInput->GetKeyPressedBuffered(DIK_ESCAPE))
-	{
-		return false;
-	}
+	//static double move = 0.0f;
+	//if(m_pDirectInput->GetKeyPressedBuffered(DIK_ESCAPE))
+	//{
+	//	return false;
+	//}
 
-	if(m_pDirectInput->GetKeyPressedBuffered(DIK_NUMPADENTER))
-	{
-		m_Base.SaveValues();
-	}
+	//if(m_pDirectInput->GetKeyPressedBuffered(DIK_NUMPADENTER))
+	//{
+	//	m_Base.SaveValues();
+	//}
 
-	if(m_pDirectInput->GetKeyPressed(DIK_UPARROW))
-	{
-		m_Base.RotatePiece(0.0005f);
-	}
+	//if(m_pDirectInput->GetKeyPressed(DIK_UPARROW))
+	//{
+	//	m_Base.RotatePiece(0.0005f);
+	//}
 
-	if(m_pDirectInput->GetKeyPressed(DIK_DOWNARROW))
-	{
-		m_Base.RotatePiece(-0.0005f);
-	}
+	//if(m_pDirectInput->GetKeyPressed(DIK_DOWNARROW))
+	//{
+	//	m_Base.RotatePiece(-0.0005f);
+	//}
 
-	if(m_pDirectInput->GetKeyPressed(DIK_RIGHTARROW))
-	{
-		m_Base.ScalePiece(0.0005f, 0.0005f);
-	}
+	//if(m_pDirectInput->GetKeyPressed(DIK_RIGHTARROW))
+	//{
+	//	m_Base.ScalePiece(0.0005f, 0.0005f);
+	//}
 
-	if(m_pDirectInput->GetKeyPressed(DIK_LEFTARROW))
-	{
-		m_Base.ScalePiece(-0.0005f, -0.0005f);
-	}
+	//if(m_pDirectInput->GetKeyPressed(DIK_LEFTARROW))
+	//{
+	//	m_Base.ScalePiece(-0.0005f, -0.0005f);
+	//}
 
-	if(m_pDirectInput->GetKeyPressedBuffered(DIK_ADD))
-	{
-		m_Base.SelectNextArray();
-	}
+	//if(m_pDirectInput->GetKeyPressedBuffered(DIK_ADD))
+	//{
+	//	m_Base.SelectNextArray();
+	//}
 
-	if(m_pDirectInput->GetKeyPressedBuffered(DIK_SUBTRACT))
-	{
-		m_Base.SelectPrevArray();
-	}
+	//if(m_pDirectInput->GetKeyPressedBuffered(DIK_SUBTRACT))
+	//{
+	//	m_Base.SelectPrevArray();
+	//}
 
-	if(m_pDirectInput->GetKeyPressedBuffered(DIK_NUMPADSTAR))
-	{
-		m_Base.SelectNextPiece();
-	}
+	//if(m_pDirectInput->GetKeyPressedBuffered(DIK_NUMPADSTAR))
+	//{
+	//	m_Base.SelectNextPiece();
+	//}
 
-	if(m_pDirectInput->GetKeyPressedBuffered(DIK_O))
-	{
-		if(m_bWireframe = !m_bWireframe)
-		{
-			m_pDirect3D->GetD3DDevice()->SetRenderState(D3DRS_FILLMODE,D3DFILL_WIREFRAME);
-		}else
-		{
-			m_pDirect3D->GetD3DDevice()->SetRenderState(D3DRS_FILLMODE,D3DFILL_SOLID);
-		}
-	}
-	
+	//if(m_pDirectInput->GetKeyPressedBuffered(DIK_O))
+	//{
+	//	if(m_bWireframe = !m_bWireframe)
+	//	{
+	//		m_pDirect3D->GetD3DDevice()->SetRenderState(D3DRS_FILLMODE,D3DFILL_WIREFRAME);
+	//	}else
+	//	{
+	//		m_pDirect3D->GetD3DDevice()->SetRenderState(D3DRS_FILLMODE,D3DFILL_SOLID);
+	//	}
+	//}
+	//
 	return true;
 }
 
