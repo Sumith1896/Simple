@@ -424,6 +424,7 @@
     <ClCompile Include="Source\Direct3D10.cpp" />
     <ClCompile Include="Source\DirectInput.cpp" />
     <ClCompile Include="Source\EffectsManager.cpp" />
+    <ClCompile Include="Source\GameState.cpp" />
     <ClCompile Include="Source\InputInterp.cpp" />
     <ClCompile Include="Source\MeshManager.cpp" />
     <ClCompile Include="Source\NewTerrain.cpp" />
@@ -454,6 +455,7 @@
     <ClInclude Include="Source\Direct3D10.h" />
     <ClInclude Include="Source\DirectInput.h" />
     <ClInclude Include="Source\EffectsManager.h" />
+    <ClInclude Include="Source\GameState.h" />
     <ClInclude Include="Source\Helpers.h" />
     <ClInclude Include="Source\InputInterp.h" />
     <ClInclude Include="Source\MeshManager.h" />
