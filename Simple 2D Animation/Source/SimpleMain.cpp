@@ -73,8 +73,9 @@ void CSimpleMain::InitCSimpleMain(HWND hWnd, HINSTANCE hInstance, int nWidth, in
 	m_pCamera			= CCamera::GetInstance();
 	m_pTerrain			= CTerrain::GetInstance();
 	m_pWorld			= World::GetInstance();
-
-	m_pNewTerrain			= NewTerrain::GetInstance();
+	m_pPlayerManager	= PlayerManager::GetInstance();
+	m_pNewTerrain		= NewTerrain::GetInstance();
+	m_pInputInterp		= InputInterp::GetInstance();
 
 
 	//init all the singletons
@@ -86,11 +87,21 @@ void CSimpleMain::InitCSimpleMain(HWND hWnd, HINSTANCE hInstance, int nWidth, in
 	m_pBMPFont->InitBMPFont(128);
 	//m_pTerrain->InitTerrain();
 	m_pWorld->Init();
+	m_pPlayerManager->Init();
 
 	m_pNewTerrain->InitTerrain();
 
 	m_pAnimationManager->Load2DAnimaton("test.txt");
 
+	Player newPlayer;
+	newPlayer.d3dLookAt.x = 0.0f;
+	newPlayer.d3dLookAt.y = 0.0f;
+	newPlayer.d3dLookAt.z = 0.0f;
+	newPlayer.d3dPosition.x = 0.0f;
+	newPlayer.d3dPosition.y = 0.0f;
+	newPlayer.d3dPosition.z = -25.0f;
+
+	m_pPlayerManager->CreatePlayer(newPlayer);
 
 	m_pTimer->CreateTimer();
 
@@ -116,6 +127,8 @@ bool CSimpleMain::UpdateCSimpleMain()
 	m_pTimer->Update(0);
 
 	m_pCamera->Update();
+
+	m_pPlayerManager->UpdatePlayers();
 
 	if(!Inputs())
 		return false;

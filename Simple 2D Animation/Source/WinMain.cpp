@@ -30,7 +30,7 @@ using namespace std;
 #define WINDOW_WIDTH	1024					//window width
 #define WINDOW_HEIGHT	768				//window height
 #define CLASSNAME "Simple Shell"			//window class name
-#define MAX_CONSOLE_LINES 500				//maxium lines a console window will have
+#define MAX_CONSOLE_LINES 250				//maxium lines a console window will have
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 int WINAPI WinMain(	HINSTANCE hinstance, HINSTANCE hprevinstance, LPSTR lpcmdline, int ncmdshow);

@@ -56,8 +56,13 @@ CCamera *CCamera::GetInstance()
 //////////////////////////////////////////////////////////////////////////
 void CCamera::InitCamera()
 {
-	m_pDirectX		= CDirectX9::GetInstance();
-	m_pTimer		= Timer::GetInstance();
+	m_pDirectX			= CDirectX9::GetInstance();
+	m_pTimer			= Timer::GetInstance();
+	m_pGameState		= GameState::GetInstance();
+	m_pPlayerManager	= PlayerManager::GetInstance();
+
+	m_pGameState->Init();
+	m_pPlayerManager->Init();
 
 	m_vLookAtPt = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_vEyePt	= D3DXVECTOR3(0.0f, 0.0f, -25.0f);
@@ -95,15 +100,8 @@ void CCamera::Update()
 //////////////////////////////////////////////////////////////////////////
 void CCamera::Move()
 {
-	//D3DXVECTOR3 vDirection;
-
-	//D3DXVec3Normalize(&vDirection,&(m_vLookAtPt - m_vEyePt));
-
-	//if(m_pDirectInput->GetKeyPressed(DIK_W))
-	//{
-	//	m_vEyePt += vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
-	//	m_vLookAtPt += vDirection * (m_fSpeed * m_pTimer->GetFractionOfSecondsPassed(0));
-	//}
+	m_vEyePt = m_pPlayerManager->GetPosition(0);
+	m_vLookAtPt = m_pPlayerManager->GetLookAt(0);
 
 	//if(m_pDirectInput->GetKeyPressed(DIK_S))
 	//{

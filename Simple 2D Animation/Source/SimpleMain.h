@@ -24,6 +24,8 @@
 #include "NewTerrain.h"
 #include "BlockObject.h"
 #include "World.h"
+#include "PlayerManager.h"
+#include "InputInterp.h"
 
 const int blocksize = 8;
 
@@ -52,6 +54,8 @@ private:
 	CBMPFont			*m_pBMPFont;
 	CCamera				*m_pCamera;
 	CTerrain			*m_pTerrain;
+	PlayerManager		*m_pPlayerManager;
+	InputInterp			*m_pInputInterp;
 
 	NewTerrain			*m_pNewTerrain;
 

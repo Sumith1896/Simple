@@ -12,6 +12,8 @@
 #include "Helpers.h"
 #include "DirectInput.h"
 #include "Timer.h"
+#include "GameState.h"
+#include "PlayerManager.h"
 
 class CCamera
 {
@@ -19,6 +21,8 @@ private:
 
 	Timer						*m_pTimer;				//timer pointer
 	CDirectX9					*m_pDirectX;			//directx9 pointer
+	GameState					*m_pGameState;			//the state of the game
+	PlayerManager				*m_pPlayerManager;		//player data
 
 	
 	D3DXVECTOR3					m_vEyePt;				//where the eye is in the world

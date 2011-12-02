@@ -2,8 +2,6 @@
 //
 //	Filename: 	DirectInput.h
 //
-//	Author:		Nicholas Legg
-//
 //	Purpose:	Controls the input system
 //
 //////////////////////////////////////////////////////////////////////////
@@ -17,7 +15,7 @@
 #pragma comment (lib, "dinput8.lib")
 #pragma comment (lib, "dxguid.lib")
 
-class CDirectInput
+class DirectInput
 {
 private:
 
@@ -32,23 +30,21 @@ private:
 	char					m_KeyBuffered[256];			//used for keyboard buffering
 	char					m_MouseBuffered[8];			//used for buffered mouse input
 
-	static CDirectInput *m_pInstance;					//	The instance of this class.
+	static DirectInput *m_pInstance;					//	The instance of this class.
 
 	//Constructor, copy constructor and assignment operator... all in private... ZOMG!!!  
-	CDirectInput();
-	CDirectInput(const CDirectInput &a){};
-	CDirectInput &operator=(const CDirectInput &a){};
+	DirectInput();
+	DirectInput(const DirectInput &a){};
+	DirectInput &operator=(const DirectInput &a){};
 
 public:
 
 	//	Destructor.
-	virtual ~CDirectInput(){};
+	virtual ~DirectInput(){};
 
 	//////////////////////////////////////////////////////////////////////////
 	// 
 	//	Function: 		DeleteInstance
-	//
-	//	Last Modified: 	07/08/2006
 	//
 	//	Purpose:		Delete the instance of the class, and set the pointer to NULL
 	//
@@ -59,18 +55,14 @@ public:
 	// 
 	//	Function: 		GetInstance
 	//
-	//	Last Modified: 	07/08/2006
-	//
 	//	Purpose:		Creates the first instance of this class and returns it's address.
 	//
 	//////////////////////////////////////////////////////////////////////////
-	static CDirectInput *GetInstance();
+	static DirectInput *GetInstance();
 
 	//////////////////////////////////////////////////////////////////////////
 	// 
 	//	Function: 		Shutdown
-	//
-	//	Last Modified: 	2006/08/04
 	//
 	//	Purpose:		Initializes the input class
 	//
@@ -80,8 +72,6 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	// 
 	//	Function: 		InitDirectInput
-	//
-	//	Last Modified: 	2006/08/04
 	//
 	//	Purpose:		Initializes the input class (keyboard & mouse)
 	//
@@ -93,8 +83,6 @@ public:
 	// 
 	//	Function: 		ReadInput
 	//
-	//	Last Modified: 	2006/08/04
-	//
 	//	Purpose:		Initializes the input class
 	//
 	//////////////////////////////////////////////////////////////////////////
@@ -103,8 +91,6 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	// 
 	//	Function: 		KeyPressed
-	//
-	//	Last Modified: 	2006/08/04
 	//
 	//	Purpose:		Checks to see if that key was pressed
 	//
@@ -115,8 +101,6 @@ public:
 	// 
 	//	Function: 		KeyPressed
 	//
-	//	Last Modified: 	2006/08/04
-	//
 	//	Purpose:		Checks to see if that key was pressed
 	//
 	//////////////////////////////////////////////////////////////////////////
@@ -125,8 +109,6 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	// 
 	//	Function: 		GetMouseButton
-	//
-	//	Last Modified: 	2006/08/04
 	//
 	//	Purpose:		Initializes the input class
 	//
@@ -137,8 +119,6 @@ public:
 	// 
 	//	Function: 		GetMouseButtonBuffered
 	//
-	//	Last Modified: 	2006/08/04
-	//
 	//	Purpose:		Initializes the input class
 	//
 	//////////////////////////////////////////////////////////////////////////
@@ -148,10 +128,8 @@ public:
 	// 
 	//	Function: 		GetMouseAxis
 	//
-	//	Last Modified: 	2006/08/04
-	//
 	//	Purpose:		Return the value from an axis
 	//
 	//////////////////////////////////////////////////////////////////////////
-	long CDirectInput::GetMouseAxis(long lAxis);
+	long DirectInput::GetMouseAxis(long lAxis);
 };

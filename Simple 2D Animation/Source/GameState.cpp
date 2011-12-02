@@ -1,0 +1,63 @@
+//////////////////////////////////////////////////////////////////////////
+//
+//	Filename: 	GameState.cpp
+//
+//	Purpose:	Controls the overall state of the app
+//
+//////////////////////////////////////////////////////////////////////////
+
+#include "GameState.h"
+
+//initialize the static variable member(s)
+GameState *GameState::m_pinstance = NULL;
+
+//////////////////////////////////////////////////////////////////////////
+// 
+//	Function: 		DeleteInstance
+//
+//	Last Modified: 	07/08/2006
+//
+//	Purpose:		Delete the instance of the class, and set the pointer to NULL
+//
+//////////////////////////////////////////////////////////////////////////
+void GameState::DeleteInstance()
+{
+	SAFE_DELETE(m_pinstance);
+
+	COUT << "GameState::DeleteInstance() - SUCCESS" << endl;
+}
+
+//////////////////////////////////////////////////////////////////////////
+// 
+//	Function: 		GetInstance
+//
+//	Last Modified: 	07/08/2006
+//
+//	Purpose:		Creates the first instance of this class and returns it's address.
+//
+//////////////////////////////////////////////////////////////////////////
+GameState *GameState::GetInstance()
+{
+	if(!m_pinstance)
+	{
+		m_pinstance = new GameState;
+	}
+
+	return m_pinstance;
+}
+
+//////////////////////////////////////////////////////////////////////////
+// 
+//	Function: 		Init
+//
+//	Purpose:		Initializes the GameState class
+//
+//////////////////////////////////////////////////////////////////////////
+void GameState::Init()
+{
+	//only enter here if we've been been here
+
+		m_nGameState = GAMESTATE_PLAYER_CONTROL;
+		m_bInit = true;
+
+}

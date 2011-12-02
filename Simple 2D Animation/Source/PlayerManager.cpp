@@ -9,6 +9,7 @@
 
 //initialize the static variable member(s)
 PlayerManager *PlayerManager::m_pInstance = NULL;
+int PlayerManager::m_nCounter = 0;
 
 //////////////////////////////////////////////////////////////////////////
 // 
@@ -36,6 +37,7 @@ PlayerManager *PlayerManager::GetInstance()
 	if(!m_pInstance)
 	{
 		m_pInstance = new PlayerManager;
+		m_nCounter = 0;
 	}
 
 	return m_pInstance;
@@ -50,12 +52,16 @@ PlayerManager *PlayerManager::GetInstance()
 //////////////////////////////////////////////////////////////////////////
 bool PlayerManager::Init()
 {
-	//zero out the player struct
-	memset(&m_vPlayers, 0, sizeof(Player) * PLAYERS_MAX);
+	if(m_nCounter == 0)
+	{
+		//zero out the player struct
+		memset(&m_vPlayers, 0, sizeof(Player) * PLAYERS_MAX);
 
+		//zero players to start
+		m_nPlayers = 0;
 
-	//zero players to start
-	m_nPlayers = 0;
+		m_nCounter++;
+	}
 
 	return true;
 }
@@ -79,6 +85,7 @@ int PlayerManager::CreatePlayer(Player &newPlayer)
 
 	//copy the values over
 	memcpy(&m_vPlayers[m_nPlayers], &newPlayer, sizeof(Player));
+
 
 	//return the current player index
 	return m_nPlayers++;

@@ -43,11 +43,13 @@ class CACHE_ALIGN PlayerManager
 {
 private:
 
-	Player		m_vPlayers[PLAYERS_MAX];		//the players!
-	unsigned int m_nPlayers;					//number of players in the world
-	list<PlayerPacket> m_vPlayerPackets;		//list of all the packets not processed
-	unsigned int	m_nCurrentStamp;			//current number stamp for the packets
-	static	PlayerManager *m_pInstance;			//instance to the singleton	
+	static int m_nCounter;
+		static	PlayerManager	*m_pInstance;			//instance to the singleton	
+	list<PlayerPacket>		m_vPlayerPackets;		//list of all the packets not processed
+	Player					m_vPlayers[PLAYERS_MAX];//the players!
+	unsigned int			m_nPlayers;				//number of players in the world
+	unsigned int			m_nCurrentStamp;		//current number stamp for the packets
+	bool					m_bInit;				//true if we already set this class up
 
 	PlayerManager(){};
 	PlayerManager(const PlayerManager &a){};
